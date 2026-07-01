@@ -540,8 +540,15 @@ export default function GreenLCPage() {
             </span>
           </div>
           <p className="text-sm text-emerald-950/40">
-            Developed with technology partner Spectrum Software and Consulting
-            (Pvt.) Ltd.
+            Developed by{" "}
+            <a
+              href="http://sscl.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-600 hover:text-emerald-700 underline underline-offset-2 transition-colors"
+            >
+              Spectrum Software and Consulting (Pvt.) Ltd
+            </a>
           </p>
         </div>
       </footer>
