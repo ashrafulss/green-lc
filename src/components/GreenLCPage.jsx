@@ -145,15 +145,21 @@ function BankChip({ name, logo, status }) {
 
 export default function GreenLCPage() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // SSR / Framework Safe environmental check
     if (typeof window === "undefined") return;
 
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const stats = [
+    [completedBanks.length, "Banks completed PoC"],
+    [queuedBanks.length, "Banks in queue"],
+    ["2025", "FE Circular No. 06"],
+  ];
 
   return (
     <div className="min-h-screen w-full bg-white font-sans text-emerald-950 antialiased flex flex-col gap-y-6">
@@ -179,40 +185,116 @@ export default function GreenLCPage() {
 
         {/* NAVBAR */}
         <nav
-          className={`fixed left-0 right-0 top-0 z-50 flex w-full items-center justify-between px-6 py-4 sm:px-12 lg:px-20 transition-all duration-300 ${
-            scrolled
+          className={`fixed left-0 right-0 top-0 z-50 flex w-full flex-col px-6 py-4 sm:px-12 lg:px-20 transition-all duration-300 ${
+            scrolled || mobileMenuOpen
               ? "border-b border-emerald-900/10 bg-[#06281c]/95 backdrop-blur-md shadow-md shadow-emerald-900/10"
               : "bg-transparent"
           }`}
         >
-          <div className="flex items-center gap-3">
-            <img
-              src="/logoglc.png"
-              alt="GreenLC System Logo"
-              className="h-10 w-10 object-contain drop-shadow-lg"
-            />
-            <span className="text-xl font-extrabold tracking-tight text-white">
-              Green<span className="text-emerald-400">LC</span>
-            </span>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img
+                src="/logoglc.png"
+                alt="GreenLC System Logo"
+                className="h-10 w-10 object-contain drop-shadow-lg"
+              />
+              <span className="text-xl font-extrabold tracking-tight text-white">
+                Green<span className="text-emerald-400">LC</span>
+              </span>
+            </div>
+
+            {/* Desktop Links */}
+            <div className="hidden items-center gap-8 text-sm font-medium text-emerald-100/70 sm:flex">
+              <a href="#need" className="transition-colors hover:text-white">
+                About
+              </a>
+              <a href="#how" className="transition-colors hover:text-white">
+                How it works
+              </a>
+              <a href="#banks" className="transition-colors hover:text-white">
+                Banks
+              </a>
+              <a href="#forward" className="transition-colors hover:text-white">
+                Way Forward
+              </a>
+            </div>
+
+            {/* Mobile Toggle Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              type="button"
+              className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white sm:hidden focus:outline-none"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? (
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
-          <div className="hidden items-center gap-8 text-sm font-medium text-emerald-100/70 sm:flex">
-            <a href="#need" className="transition-colors hover:text-white">
-              About
-            </a>
-            <a href="#how" className="transition-colors hover:text-white">
-              How it works
-            </a>
-            <a href="#banks" className="transition-colors hover:text-white">
-              Banks
-            </a>
-            <a href="#forward" className="transition-colors hover:text-white">
-              Way Forward
-            </a>
-          </div>
+
+          {/* Mobile Panel Layout */}
+          {mobileMenuOpen && (
+            <div className="mt-4 flex flex-col gap-y-4 pb-4 text-base font-semibold text-emerald-100/90 sm:hidden border-t border-white/10 pt-4">
+              <a
+                href="#need"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2 py-1 transition-colors hover:text-white hover:bg-white/5 rounded-md"
+              >
+                About
+              </a>
+              <a
+                href="#how"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2 py-1 transition-colors hover:text-white hover:bg-white/5 rounded-md"
+              >
+                How it works
+              </a>
+              <a
+                href="#banks"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2 py-1 transition-colors hover:text-white hover:bg-white/5 rounded-md"
+              >
+                Banks
+              </a>
+              <a
+                href="#forward"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-2 py-1 transition-colors hover:text-white hover:bg-white/5 rounded-md"
+              >
+                Way Forward
+              </a>
+            </div>
+          )}
         </nav>
 
         {/* HERO CONTENT */}
-        <div className="relative w-full px-6 pb-24 pt-24 sm:px-12 sm:pt-32 lg:px-20 flex flex-col gap-y-6">
+        <div className="relative w-full px-6 pb-24 pt-28 sm:px-12 sm:pt-32 lg:px-20 flex flex-col gap-y-6">
           <div className="w-fit inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             National Financial Messaging Initiative
@@ -229,11 +311,7 @@ export default function GreenLCPage() {
           </div>
 
           <div className="grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-3">
-            {[
-              [completedBanks.length, "Banks completed PoC"],
-              [queuedBanks.length, "Banks in queue"],
-              ["2025", "FE Circular No. 06"],
-            ].map(([num, label]) => (
+            {stats.map(([num, label]) => (
               <div
                 key={label}
                 className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur-sm"
