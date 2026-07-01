@@ -120,7 +120,6 @@ function BankChip({ name, logo, status }) {
           : "border-emerald-900/10 bg-emerald-950/[0.03] opacity-40"
       }`}
     >
-      {/* Checkmark badge top-right */}
       {isDone && (
         <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-[9px] font-bold text-white shadow-sm">
           ✓
@@ -130,7 +129,7 @@ function BankChip({ name, logo, status }) {
       {!imgError ? (
         <img
           src={logo}
-          alt={name}
+          alt={`${name} logo`}
           title={name}
           className="h-14 w-full object-contain"
           onError={() => setImgError(true)}
@@ -148,18 +147,20 @@ export default function GreenLCPage() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    // SSR / Framework Safe environmental check
+    if (typeof window === "undefined") return;
+
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-white font-sans text-emerald-950 antialiased">
+    <div className="min-h-screen w-full bg-white font-sans text-emerald-950 antialiased flex flex-col gap-y-6">
       {/* HERO */}
       <header className="relative w-full overflow-hidden bg-[#06281c]">
-        {/* mesh glow */}
         <div
-          aria-hidden
+          aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             background:
@@ -167,7 +168,7 @@ export default function GreenLCPage() {
           }}
         />
         <div
-          aria-hidden
+          aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage:
@@ -187,7 +188,7 @@ export default function GreenLCPage() {
           <div className="flex items-center gap-3">
             <img
               src="/logoglc.png"
-              alt="GreenLC Logo"
+              alt="GreenLC System Logo"
               className="h-10 w-10 object-contain drop-shadow-lg"
             />
             <span className="text-xl font-extrabold tracking-tight text-white">
@@ -211,21 +212,23 @@ export default function GreenLCPage() {
         </nav>
 
         {/* HERO CONTENT */}
-        <div className="relative w-full px-6 pb-24 pt-14 sm:px-12 sm:pt-20 lg:px-20">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
+        <div className="relative w-full px-6 pb-24 pt-24 sm:px-12 sm:pt-32 lg:px-20 flex flex-col gap-y-6">
+          <div className="w-fit inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
             National Financial Messaging Initiative
           </div>
 
-          <h1 className="mt-8 max-w-4xl text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-7xl">
-            Green<span className="text-emerald-400">LC</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-emerald-100/80 sm:text-xl">
-            A blockchain-enabled national network for fully digitized inland
-            Letter of Credit transactions between banks in Bangladesh.
-          </p>
+          <div>
+            <h1 className="max-w-4xl text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-7xl">
+              Green<span className="text-emerald-400">LC</span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-emerald-100/80 sm:text-xl">
+              A blockchain-enabled national network for fully digitized inland
+              Letter of Credit transactions between banks in Bangladesh.
+            </p>
+          </div>
 
-          <div className="mt-12 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-3">
+          <div className="grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-3">
             {[
               [completedBanks.length, "Banks completed PoC"],
               [queuedBanks.length, "Banks in queue"],
@@ -242,9 +245,8 @@ export default function GreenLCPage() {
           </div>
         </div>
 
-        {/* bottom edge wave */}
         <svg
-          aria-hidden
+          aria-hidden="true"
           viewBox="0 0 1440 60"
           className="block w-full text-white"
           preserveAspectRatio="none"
@@ -256,9 +258,12 @@ export default function GreenLCPage() {
         </svg>
       </header>
 
-      <main className="w-full px-6 sm:px-12 lg:px-20">
+      <main className="w-full px-6 sm:px-12 lg:px-20 flex flex-col gap-y-16">
         {/* WHY IT MATTERS */}
-        <section id="need" className="border-b border-emerald-900/10 py-16">
+        <section
+          id="need"
+          className="border-b border-emerald-900/10 pb-16 flex flex-col gap-y-6"
+        >
           <div className="flex flex-col gap-3">
             <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
               A national need
@@ -267,7 +272,7 @@ export default function GreenLCPage() {
               Why it matters
             </span>
           </div>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-emerald-950/80">
+          <p className="max-w-3xl text-base leading-relaxed text-emerald-950/80">
             The inland LC process in Bangladesh remains fragmented and manual,
             heavily dependent on physical documentation, SWIFT, emails, and
             courier services. In the absence of a standardized national
@@ -276,7 +281,7 @@ export default function GreenLCPage() {
             in unnecessary foreign currency outflows.
           </p>
 
-          <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {benefits.map((b) => (
               <div
                 key={b.title}
@@ -297,16 +302,21 @@ export default function GreenLCPage() {
         </section>
 
         {/* HOW IT WORKS */}
-        <section id="how" className="border-b border-emerald-900/10 py-16">
-          <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
-            How GreenLC works
-          </h2>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-emerald-950/80">
-            GreenLC is a secure financial messaging network purpose-built for LC
-            communications within Bangladesh.
-          </p>
+        <section
+          id="how"
+          className="border-b border-emerald-900/10 pb-16 flex flex-col gap-y-6"
+        >
+          <div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
+              How GreenLC works
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-emerald-950/80">
+              GreenLC is a secure financial messaging network purpose-built for
+              LC communications within Bangladesh.
+            </p>
+          </div>
 
-          <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-emerald-900/10 bg-emerald-900/10 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-emerald-900/10 bg-emerald-900/10 sm:grid-cols-2">
             {features.map((f, i) => (
               <div
                 key={f.title}
@@ -327,32 +337,37 @@ export default function GreenLCPage() {
         </section>
 
         {/* POC BANKS */}
-        <section id="banks" className="border-b border-emerald-900/10 py-16">
-          <div className="flex flex-col gap-3 p-2">
-            <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
-              Proof of concept, bank by bank
-            </h2>
-            <span className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              {completedBanks.length + queuedBanks.length} banks engaged
-            </span>
+        <section
+          id="banks"
+          className="border-b border-emerald-900/10 pb-16 flex flex-col gap-y-8"
+        >
+          <div className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-3">
+              <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
+                Proof of concept, bank by bank
+              </h2>
+              <span className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                {completedBanks.length + queuedBanks.length} banks engaged
+              </span>
+            </div>
+            <p className="max-w-3xl text-base leading-relaxed text-emerald-950/80">
+              Following FE Circular No. 06 (dated January 14, 2025), a
+              successful PoC was executed in collaboration with technology
+              partner Spectrum Software and Consulting (Pvt.) Ltd. These results
+              confirmed the platform's technical robustness, security, and
+              operational benefits, drastically reducing processing time and
+              cost while building trust among participating institutions.
+            </p>
           </div>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-emerald-950/80">
-            Following FE Circular No. 06 (dated January 14, 2025), a successful
-            PoC was executed in collaboration with technology partner Spectrum
-            Software and Consulting (Pvt.) Ltd. These results confirmed the
-            platform's technical robustness, security, and operational benefits,
-            drastically reducing processing time and cost while building trust
-            among participating institutions.
-          </p>
 
-          <div className="mt-12">
-            <div className="flex items-center gap-10">
+          <div className="flex flex-col gap-y-4">
+            <div className="flex items-center gap-3">
               <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-emerald-500 to-green-600" />
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-950">
                 PoC completed — {completedBanks.length} banks
               </h3>
             </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {completedBanks.map((bank) => (
                 <BankChip
                   key={bank.name}
@@ -364,14 +379,14 @@ export default function GreenLCPage() {
             </div>
           </div>
 
-          <div className="mt-10">
+          <div className="flex flex-col gap-y-4">
             <div className="flex items-center gap-3">
               <span className="h-2.5 w-2.5 rounded-full border border-dashed border-emerald-900/30" />
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-950/40">
                 In queue for PoC — {queuedBanks.length} banks
               </h3>
             </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {queuedBanks.map((bank) => (
                 <BankChip
                   key={bank.name}
@@ -385,18 +400,20 @@ export default function GreenLCPage() {
         </section>
 
         {/* WAY FORWARD */}
-        <section id="forward" className="py-16">
-          <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
-            The way forward
-          </h2>
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-emerald-950/80">
-            To institutionalize GreenLC, we propose the formation of a formal
-            consortium of participating banks, governed in consultation with
-            Bangladesh Bank and aligned with national policy objectives. We
-            respectfully seek support in the following areas:
-          </p>
+        <section id="forward" className="pb-16 flex flex-col gap-y-8">
+          <div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
+              The way forward
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-emerald-950/80">
+              To institutionalize GreenLC, we propose the formation of a formal
+              consortium of participating banks, governed in consultation with
+              Bangladesh Bank and aligned with national policy objectives. We
+              respectfully seek support in the following areas:
+            </p>
+          </div>
 
-          <ol className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {asks.map((a, i) => (
               <li
                 key={a}
@@ -412,9 +429,9 @@ export default function GreenLCPage() {
             ))}
           </ol>
 
-          <div className="relative mt-16 overflow-hidden rounded-3xl bg-[#06281c] p-10 sm:p-14">
+          <div className="relative overflow-hidden rounded-3xl bg-[#06281c] p-10 sm:p-14">
             <div
-              aria-hidden
+              aria-hidden="true"
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
@@ -431,13 +448,14 @@ export default function GreenLCPage() {
         </section>
       </main>
 
-      <footer className="w-full border-t border-emerald-900/10 py-10">
-        <div className="flex w-full flex-wrap items-center justify-between gap-4 px-6 sm:px-12 lg:px-20">
+      {/* FOOTER */}
+      <footer className="w-full border-t border-emerald-900/10 py-10 mt-auto">
+        <div className="flex w-full flex-wrap items-center justify-between gap-6 px-6 sm:px-12 lg:px-20">
           <div className="flex items-center gap-3">
             <img
               src="/logoglc.png"
-              alt="GreenLC Logo"
-              className="h-7 w-7 object-contain opacity-60"
+              alt="GreenLC Footer Logo"
+              className="h-8 w-8 object-contain opacity-60"
             />
             <span className="text-sm font-semibold text-emerald-950/50">
               Green<span className="text-emerald-600">LC</span>
