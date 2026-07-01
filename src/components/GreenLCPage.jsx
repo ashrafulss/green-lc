@@ -1,5 +1,4 @@
-import React from "react";
-
+import { useEffect, useState } from "react";
 const completedBanks = [
   "Prime Bank",
   "Dhaka Bank",
@@ -112,6 +111,14 @@ function BankChip({ name, status }) {
 }
 
 export default function GreenLCPage() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-white font-sans text-emerald-950 antialiased">
       {/* HERO */}
@@ -136,7 +143,13 @@ export default function GreenLCPage() {
         />
 
         {/* NAVBAR */}
-        <nav className="relative z-10 flex w-full items-center justify-between border-b border-white/10 px-6 py-4 sm:px-12 lg:px-20">
+        <nav
+          className={`fixed left-0 right-0 top-0 z-50 flex w-full items-center justify-between px-6 py-4 sm:px-12 lg:px-20 transition-all duration-300 ${
+            scrolled
+              ? "border-b border-emerald-900/10 bg-[#06281c]/95 backdrop-blur-md shadow-md shadow-emerald-900/10"
+              : "bg-transparent"
+          }`}
+        >
           <div className="flex items-center gap-3">
             <img
               src="/logoglc.png"
@@ -180,8 +193,8 @@ export default function GreenLCPage() {
 
           <div className="mt-12 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-3">
             {[
-              [completedBanks.length, "banks completed PoC"],
-              [queuedBanks.length, "banks in queue"],
+              [completedBanks.length, "Banks completed PoC"],
+              [queuedBanks.length, "Banks in queue"],
               ["2025", "FE Circular No. 06"],
             ].map(([num, label]) => (
               <div
@@ -212,11 +225,11 @@ export default function GreenLCPage() {
       <main className="w-full px-6 sm:px-12 lg:px-20">
         {/* WHY IT MATTERS */}
         <section id="need" className="border-b border-emerald-900/10 py-16">
-          <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-3">
             <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
               A national need
             </h2>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
               Why it matters
             </span>
           </div>
@@ -281,11 +294,11 @@ export default function GreenLCPage() {
 
         {/* POC BANKS */}
         <section id="banks" className="border-b border-emerald-900/10 py-16">
-          <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-3">
             <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
               Proof of concept, bank by bank
             </h2>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="w-fit rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
               {completedBanks.length + queuedBanks.length} banks engaged
             </span>
           </div>
