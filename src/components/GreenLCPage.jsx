@@ -1,26 +1,47 @@
 import { useEffect, useState } from "react";
+
+import primeBankLogo from "../assets/banks/prime-bank.webp";
+import dhakaBankLogo from "../assets/banks/dhaka-bank.webp";
+import dutchBanglaLogo from "../assets/banks/dutch-bangla-bank.webp";
+import eximBankLogo from "../assets/banks/exim-bank.webp";
+import islamiBankLogo from "../assets/banks/islami-bank.webp";
+import ificBankLogo from "../assets/banks/ific-bank.webp";
+import mutualTrustLogo from "../assets/banks/mutual-bank.webp";
+import mercantileBankLogo from "../assets/banks/mercantile-bank.webp";
+import ucblLogo from "../assets/banks/ucb-bank.webp";
+import bracBankLogo from "../assets/banks/brac-bank.webp";
+import pubaliBankLogo from "../assets/banks/pubali-bank.webp";
+import premierBankLogo from "../assets/banks/premier-bank.webp";
+import oneBankLogo from "../assets/banks/one-bank.webp";
+import southeastBankLogo from "../assets/banks/southeast-bank.webp";
+import basicBankLogo from "../assets/banks/basic-bank.webp";
+
+import shahjalalBankLogo from "../assets/banks/shahjalal-bank.webp";
+import communityBankLogo from "../assets/banks/community-bank.webp";
+import nrbBankLogo from "../assets/banks/nrb-bank.webp";
+
 const completedBanks = [
-  "Prime Bank",
-  "Dhaka Bank",
-  "United Commercial Bank",
-  "Mutual Trust Bank",
-  "BRAC Bank",
-  "Islami Bank",
-  "Premier Bank",
-  "IFIC Bank",
-  "One Bank",
-  "Southeast Bank",
-  "Dutch Bangla Bank",
-  "Basic Bank",
-  "Mercantile Bank",
+  { name: "Prime Bank", logo: primeBankLogo },
+  { name: "Dhaka Bank", logo: dhakaBankLogo },
+  { name: "United Commercial Bank", logo: ucblLogo },
+  { name: "Mutual Trust Bank", logo: mutualTrustLogo },
+  { name: "BRAC Bank", logo: bracBankLogo },
+  { name: "Islami Bank", logo: islamiBankLogo },
+  { name: "Premier Bank", logo: premierBankLogo },
+  { name: "IFIC Bank", logo: ificBankLogo },
+  { name: "One Bank", logo: oneBankLogo },
+  { name: "Southeast Bank", logo: southeastBankLogo },
+  { name: "Dutch Bangla Bank", logo: dutchBanglaLogo },
+  { name: "Basic Bank", logo: basicBankLogo },
+  { name: "Mercantile Bank", logo: mercantileBankLogo },
 ];
 
 const queuedBanks = [
-  "EXIM Bank",
-  "Shahjalal Bank",
-  "Community Bank",
-  "NRB Bank",
-  "Pubali Bank",
+  { name: "EXIM Bank", logo: eximBankLogo },
+  { name: "Shahjalal Bank", logo: shahjalalBankLogo },
+  { name: "Community Bank", logo: communityBankLogo },
+  { name: "NRB Bank", logo: nrbBankLogo },
+  { name: "Pubali Bank", logo: pubaliBankLogo },
 ];
 
 const benefits = [
@@ -80,32 +101,45 @@ const asks = [
   "Aligning GreenLC with the broader digital finance and financial infrastructure goals of the country",
 ];
 
-function BankChip({ name, status }) {
+function BankChip({ name, logo, status }) {
   const isDone = status === "done";
+  const [imgError, setImgError] = useState(false);
+
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   return (
     <div
-      className={`group flex items-center gap-3 rounded-xl border px-4 py-3.5 transition-all duration-200 ${
+      className={`group relative flex items-center justify-center rounded-2xl border p-4 transition-all duration-200 ${
         isDone
-          ? "border-emerald-200 bg-white shadow-sm shadow-emerald-900/5 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-900/10"
-          : "border-emerald-900/10 bg-emerald-950/[0.03]"
+          ? "border-emerald-200 bg-white shadow-sm hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-900/10"
+          : "border-emerald-900/10 bg-emerald-950/[0.03] opacity-40"
       }`}
     >
-      <span
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-          isDone
-            ? "bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-sm shadow-emerald-600/30"
-            : "border border-dashed border-emerald-900/20 text-emerald-900/30"
-        }`}
-      >
-        {isDone ? "✓" : "○"}
-      </span>
-      <span
-        className={`text-sm font-medium ${
-          isDone ? "text-emerald-950" : "text-emerald-950/45"
-        }`}
-      >
-        {name}
-      </span>
+      {/* Checkmark badge top-right */}
+      {isDone && (
+        <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-green-600 text-[9px] font-bold text-white shadow-sm">
+          ✓
+        </span>
+      )}
+
+      {!imgError ? (
+        <img
+          src={logo}
+          alt={name}
+          title={name}
+          className="h-14 w-full object-contain"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <span className="text-sm font-extrabold text-emerald-700">
+          {initials}
+        </span>
+      )}
     </div>
   );
 }
@@ -294,7 +328,7 @@ export default function GreenLCPage() {
 
         {/* POC BANKS */}
         <section id="banks" className="border-b border-emerald-900/10 py-16">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 p-2">
             <h2 className="text-3xl font-extrabold tracking-tight text-emerald-950 sm:text-4xl">
               Proof of concept, bank by bank
             </h2>
@@ -312,15 +346,20 @@ export default function GreenLCPage() {
           </p>
 
           <div className="mt-12">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-10">
               <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-emerald-500 to-green-600" />
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-950">
                 PoC completed — {completedBanks.length} banks
               </h3>
             </div>
-            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {completedBanks.map((bank) => (
-                <BankChip key={bank} name={bank} status="done" />
+                <BankChip
+                  key={bank.name}
+                  name={bank.name}
+                  logo={bank.logo}
+                  status="done"
+                />
               ))}
             </div>
           </div>
@@ -332,9 +371,14 @@ export default function GreenLCPage() {
                 In queue for PoC — {queuedBanks.length} banks
               </h3>
             </div>
-            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {queuedBanks.map((bank) => (
-                <BankChip key={bank} name={bank} status="queued" />
+                <BankChip
+                  key={bank.name}
+                  name={bank.name}
+                  logo={bank.logo}
+                  status="queued"
+                />
               ))}
             </div>
           </div>
